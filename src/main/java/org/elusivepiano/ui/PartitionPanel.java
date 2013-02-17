@@ -12,9 +12,9 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import org.elusivepiano.solfège.Accord;
-import org.elusivepiano.solfège.NoteHarmonique;
-import org.elusivepiano.solfège.Partition;
+import org.elusivepiano.solfege.Accord;
+import org.elusivepiano.solfege.NoteHarmonique;
+import org.elusivepiano.solfege.Partition;
 
 @SuppressWarnings("serial")
 public class PartitionPanel extends JPanel {
@@ -46,7 +46,7 @@ public class PartitionPanel extends JPanel {
 			int height = lineHeight(line);
 			g2.drawLine(offset, height, getWidth() - 10, height);
 		}
-		//clé de sol
+		//cle de sol
 		offset += 5;
 		g2.drawImage(cleDeSol, offset, lineHeight(13), 25, lineHeight(-2)-lineHeight(13), null);
 		offset += 50;
@@ -88,8 +88,8 @@ public class PartitionPanel extends JPanel {
 				drawDash(g2, offset, line);
 			}
 		}
-		//altération
-		g2.drawString(note.getAltération().getSymbol(), offset-noteWidth/2 - 16, lineHeight(note.getLine())+6);
+		//alteration
+		g2.drawString(note.getAlteration().getSymbol(), offset-noteWidth/2 - 16, lineHeight(note.getLine())+6);
 	}
 
 	/**

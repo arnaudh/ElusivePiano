@@ -2,6 +2,7 @@ package org.elusivepiano;
 
 import org.elusivepiano.midi.MidiHandler;
 import org.elusivepiano.midi.MidiUtils;
+import org.elusivepiano.profile.Profile;
 import org.elusivepiano.session.GUIsession;
 import org.elusivepiano.singlenote.SingleNoteQuiz;
 
@@ -13,8 +14,10 @@ public class PianoPractice {
 	public static void main(String[] args) {
 		MidiHandler handler = new MidiHandler();
 		MidiUtils.midiSetup(handler);
+		
+		Profile profile = Profile.loadOrCreate("Arnaud");
 
-		GUIsession session = new GUIsession(new SingleNoteQuiz());
+		GUIsession session = new GUIsession(new SingleNoteQuiz(50), profile);
 		handler.addListener(session);
 		
 //		ChordViewer chordViewer = new ChordViewer();

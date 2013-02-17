@@ -1,15 +1,15 @@
-package org.pianopractice.solfège;
+package org.elusivepiano.solfege;
 
 public class NoteHarmonique {
 
 	private Note note;
-	private Altération altération;
+	private Alteration alteration;
 	private int octave;
 
-	public NoteHarmonique(Note note, Altération altération, int octave) {
+	public NoteHarmonique(Note note, Alteration alteration, int octave) {
 		super();
 		this.note = note;
-		this.altération = altération;
+		this.alteration = alteration;
 		this.octave = octave;
 	}
 
@@ -17,8 +17,8 @@ public class NoteHarmonique {
 		return note;
 	}
 
-	public Altération getAltération() {
-		return altération;
+	public Alteration getAlteration() {
+		return alteration;
 	}
 
 	public int getOctave() {
@@ -42,7 +42,7 @@ public class NoteHarmonique {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(note.toString());
-		sb.append(altération.getSymbol());
+		sb.append(alteration.getSymbol());
 		sb.append(octave);
 		return sb.toString();
 	}
@@ -58,14 +58,14 @@ public class NoteHarmonique {
 	public static NoteHarmonique createFrom(int key) {
 		int octave = key / 12;
 		int semiton = key % 12;
-		// altération
-		Altération altération;
+		// alteration
+		Alteration alteration;
 		if (semiton == 1 || semiton == 3 || semiton == 6 || semiton == 8
 				|| semiton == 10) {
-			altération = Altération.DIÈSE;
+			alteration = Alteration.DIESE;
 			semiton--;
 		} else {
-			altération = Altération.AUCUNE;
+			alteration = Alteration.AUCUNE;
 		}
 		// note value (0 to 6)
 		if (semiton == 2 || semiton == 4) {
@@ -74,7 +74,7 @@ public class NoteHarmonique {
 			semiton = (semiton + 1) / 2;
 		}
 		NoteHarmonique noteHarmonique = new NoteHarmonique(
-				Note.values()[semiton], altération, octave);
+				Note.values()[semiton], alteration, octave);
 		return noteHarmonique;
 	}
 

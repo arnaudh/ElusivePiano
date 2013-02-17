@@ -1,9 +1,9 @@
 package org.elusivepiano.ui;
 
 import org.elusivepiano.midi.MidiEventListener;
-import org.elusivepiano.solfège.Accord;
-import org.elusivepiano.solfège.NoteHarmonique;
-import org.elusivepiano.solfège.Partition;
+import org.elusivepiano.solfege.Accord;
+import org.elusivepiano.solfege.NoteHarmonique;
+import org.elusivepiano.solfege.Partition;
 
 public class ChordViewer extends PartitionPanel implements MidiEventListener {
 

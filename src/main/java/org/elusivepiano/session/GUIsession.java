@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
 import org.elusivepiano.midi.MidiEventListener;
+import org.elusivepiano.profile.Profile;
 import org.elusivepiano.question.Answer;
 import org.elusivepiano.question.NoteAnswer;
 import org.elusivepiano.question.Question;
@@ -20,22 +21,28 @@ import org.elusivepiano.question.Quiz;
 import org.elusivepiano.question.Result;
 import org.elusivepiano.question.StringAnswer;
 import org.elusivepiano.singlenote.SingleNoteQuestion;
-import org.elusivepiano.solfège.NoteHarmonique;
-import org.elusivepiano.solfège.Partition;
+import org.elusivepiano.solfege.NoteHarmonique;
+import org.elusivepiano.solfege.Partition;
 import org.elusivepiano.ui.PartitionPanel;
 
 public class GUIsession implements ActionListener, MidiEventListener {
 
 	private Quiz quiz;
 	private Question currentQuestion;
+	private long timestampStartQuiz;
+	private int errors = 0;
+	private Profile profile;
 
+	private final long timePenaltyOnError = 1000; //1 second
+	
 	private JFrame frame = new JFrame();
 	private PartitionPanel questionPanel = new PartitionPanel();
 	private JTextField answerField = new JTextField(20);
 	private JLabel infoPanel = new JLabel();
 
-	public GUIsession(Quiz quiz) {
+	public GUIsession(Quiz quiz, Profile profile) {
 		this.quiz = quiz;
+		this.profile = profile;
 		answerField.addActionListener(this);
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -46,6 +53,7 @@ public class GUIsession implements ActionListener, MidiEventListener {
 		});
 
 		showNextQuestion();
+		timestampStartQuiz = System.currentTimeMillis();
 	}
 
 	private void setupUI() {
@@ -95,9 +103,13 @@ public class GUIsession implements ActionListener, MidiEventListener {
 		if (result.isCorrect()) {
 			infoPanel.setText(result.toString());
 			showNextQuestion();
-			if (currentQuestion == null) {
-				infoPanel.setText(quiz.getScore().toString());
+			if (currentQuestion == null) { // The end
+				long score = System.currentTimeMillis() - timestampStartQuiz;
+				infoPanel.setText("Score = "+score+" (number of errors = "+errors+")");
+				profile.append( quiz.getTitle(), ""+score);
 			}
+		}else{
+			timestampStartQuiz -= timePenaltyOnError;
 		}
 		
 	}

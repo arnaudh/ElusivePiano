@@ -1,6 +1,6 @@
 package org.elusivepiano.question;
 
-import org.elusivepiano.solfège.NoteHarmonique;
+import org.elusivepiano.solfege.NoteHarmonique;
 
 public class NoteAnswer extends Answer {
 

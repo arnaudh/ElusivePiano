@@ -1,4 +1,4 @@
-package org.pianopractice.solfège;
+package org.elusivepiano.solfege;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package org.elusivepiano.solfège;
+package org.elusivepiano.solfege;
 
 
 public enum Note {
