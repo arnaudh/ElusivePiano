@@ -5,7 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 
@@ -73,7 +76,7 @@ public class Profile {
 	public void put(String key, String value) {
 		properties.put(key, value);
 		try {
-			properties.store(new FileOutputStream(new File(profilesFolder, name)), "sans commentaires");
+			properties.store(new FileOutputStream(new File(profilesFolder, name)), name);
 		} catch (IOException e) {
 			log.error("Could not store profile " + name, e);
 		}
@@ -85,8 +88,20 @@ public class Profile {
 
 	public void append(String key, String value) {
 		String existingValue = properties.getProperty(key);
-		String prepend = existingValue==null ? "" : existingValue+", ";
+		String prepend = existingValue==null ? "" : existingValue+" ";
 		put(key, prepend+value);
+	}
+
+	public List<Integer> getInts(String key) {
+		List<Integer> ints = new ArrayList<Integer>();
+		String value = properties.getProperty(key);
+		if( value == null ) return ints;
+		
+		Scanner scanner = new Scanner(properties.getProperty(key));
+		while( scanner.hasNext() ){
+			ints.add( scanner.nextInt() );
+		}
+		return ints;
 	}
 	
 }

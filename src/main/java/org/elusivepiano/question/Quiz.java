@@ -1,22 +1,50 @@
 package org.elusivepiano.question;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import org.elusivepiano.profile.Score;
 
-public abstract class Quiz implements Iterable<Question> {
 
-	protected List<Question> questions = new ArrayList<Question>();
+public abstract class Quiz{
 
-	public Result postAnswer(Question question, Answer answer) {
-		return new Result(question.isCorrect(answer), 0, 0);
+	protected int length;
+	protected long timePenaltyOnError = 1000; // 1 second
+
+	private long startTimestamp=-1;
+	private int errors = 0;
+	
+	protected Quiz(int length) {
+		super();
+		this.length = length;
 	}
 
-	public Iterator<Question> iterator() {
-		return questions.iterator();
+	public Result postAnswer(Question question, Answer answer) {
+		if( !question.isCorrect(answer) ){
+			errors++;
+		}
+		return new Result(question.isCorrect(answer), 0, 0);
 	}
 
 	public abstract String getTitle();
 
-	public abstract Question getNextQuestion();
+	public Question getNextQuestion(){
+		if( startTimestamp < 0 ){
+			startTimestamp = System.currentTimeMillis();
+		}
+		return getQuestion();
+	}
+	
+	protected abstract Question getQuestion();
+
+	public int getLength() {
+		return length;
+	}
+
+	public Score evaluateScore(long stopTime) {
+		double timePerQuestion = (stopTime - startTimestamp) / length;
+		double penaltyPerQuestion =  timePenaltyOnError*errors / length;
+		double denominator = (timePerQuestion + penaltyPerQuestion)/1000;
+		int score = (int) (1000 / (denominator*denominator));
+		return new Score(errors, timePerQuestion, score);
+	}
+	
+	
 }

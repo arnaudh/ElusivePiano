@@ -1,5 +1,4 @@
 
-- Finish scoring		+
 - F key practice		++
 - Piano sound			+++
 - Interval guessing		+++

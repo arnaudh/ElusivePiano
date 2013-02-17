@@ -17,7 +17,7 @@ public class PianoPractice {
 		
 		Profile profile = Profile.loadOrCreate("Arnaud");
 
-		GUIsession session = new GUIsession(new SingleNoteQuiz(50), profile);
+		GUIsession session = new GUIsession(new SingleNoteQuiz(20), profile);
 		handler.addListener(session);
 		
 //		ChordViewer chordViewer = new ChordViewer();

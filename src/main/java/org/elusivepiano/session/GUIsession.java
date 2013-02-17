@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 
 import org.elusivepiano.midi.MidiEventListener;
 import org.elusivepiano.profile.Profile;
+import org.elusivepiano.profile.Score;
 import org.elusivepiano.question.Answer;
 import org.elusivepiano.question.NoteAnswer;
 import org.elusivepiano.question.Question;
@@ -29,12 +30,9 @@ public class GUIsession implements ActionListener, MidiEventListener {
 
 	private Quiz quiz;
 	private Question currentQuestion;
-	private long timestampStartQuiz;
-	private int errors = 0;
 	private Profile profile;
 
-	private final long timePenaltyOnError = 1000; //1 second
-	
+
 	private JFrame frame = new JFrame();
 	private PartitionPanel questionPanel = new PartitionPanel();
 	private JTextField answerField = new JTextField(20);
@@ -53,7 +51,6 @@ public class GUIsession implements ActionListener, MidiEventListener {
 		});
 
 		showNextQuestion();
-		timestampStartQuiz = System.currentTimeMillis();
 	}
 
 	private void setupUI() {
@@ -98,20 +95,31 @@ public class GUIsession implements ActionListener, MidiEventListener {
 	}
 
 	public void handle(Answer answer) {
+		if( currentQuestion==null ) return;
 		Result result = quiz.postAnswer(currentQuestion, answer);
 		infoPanel.setText(result.toString());
 		if (result.isCorrect()) {
 			infoPanel.setText(result.toString());
 			showNextQuestion();
 			if (currentQuestion == null) { // The end
-				long score = System.currentTimeMillis() - timestampStartQuiz;
-				infoPanel.setText("Score = "+score+" (number of errors = "+errors+")");
-				profile.append( quiz.getTitle(), ""+score);
+				Score score = quiz.evaluateScore(System.currentTimeMillis());
+				boolean highScore = true;
+				for( Integer i :  profile.getInts(quiz.getTitle()) ){
+					if( score.getOverallScore() < i ){
+						highScore = false;
+						break;
+					}
+				}
+				String infoText = highScore?"High Score = ":"Score = ";
+				infoText += score.getOverallScore() + " (time per question = "+score.getTimePerQuestion()+"ms, number of errors = "
+						+ score.getErrors() + ")";
+				infoPanel.setText(infoText);
+				
+				
+				profile.append(quiz.getTitle(), "" + score.getOverallScore());
 			}
-		}else{
-			timestampStartQuiz -= timePenaltyOnError;
 		}
-		
+
 	}
 
 	@Override
@@ -122,6 +130,5 @@ public class GUIsession implements ActionListener, MidiEventListener {
 	@Override
 	public void noteUp(int key, int velocity) {
 	}
-
 
 }

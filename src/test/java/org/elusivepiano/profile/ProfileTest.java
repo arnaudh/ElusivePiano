@@ -24,6 +24,9 @@ public class ProfileTest {
 
 		profile2.put("key", "value2");
 		Assert.assertEquals("value2", profile2.get("key"));
+		
+		profile2.append("key", "more");
+		Assert.assertEquals("value2 more", profile2.get("key"));
 	}
 	
 	@After
