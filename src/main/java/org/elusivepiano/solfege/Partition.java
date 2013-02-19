@@ -1,55 +1,42 @@
 package org.elusivepiano.solfege;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.elusivepiano.ui.RenderingParams;
+
 public class Partition {
 
-	private List<Accord> accords = new ArrayList<Accord>();
-
-	private NoteHarmonique lowestNote;
-	private NoteHarmonique highestNote;
+	private List<Portee> portees = new ArrayList<Portee>();
 
 	public Partition() {
+		super();
 	}
 
 	public Partition(NoteHarmonique note) {
-		accords.add(new Accord(note));
-		this.lowestNote = this.highestNote = note;
+		List<Symbole> symboles = new ArrayList<Symbole>();
+		symboles.add(note);
+		Mesure mesure = new Mesure(symboles);
+		Portee portee = new Portee();
+		portee.getMesures().add(mesure);
+		this.portees.add(portee);
 	}
 
-
-	public String stringRepresentation() {
-		int lowestHeight = Math.min(lowestNote.getLine(), 0);
-		int highestHeight = Math.max(highestNote.getLine(), 10);
-
-		int partitionLenght = 7;
-		char[][] partition = new char[(highestHeight - lowestHeight)][partitionLenght];
-		for (int height = lowestHeight; height < highestHeight; height++) {
-			char c = (2 <= height && height <= 10 && height % 2 == 0) ? '-'
-					: ' ';
-			for (int i = 0; i < partitionLenght; i++) {
-				partition[height - lowestHeight][i] = c;
-			}
+	public void paint(Graphics2D g2, RenderingParams params) {
+		for( Portee portee : portees ){
+			portee.paint(g2, params);
+			g2.translate(0, params.getSpaceBetwenLines()*20);
 		}
-
-		int offset = 0;
-		for( Accord accord : accords ){
-			for (NoteHarmonique note : accord.getNotes()) {
-				offset += 3;
-				partition[offset][note.getLine()] = 'O';
-			}
-		}
-
-		StringBuilder sb = new StringBuilder();
-		for (int i = partition.length-1; i >= 0; i--){
-			sb.append(partition[i]);
-			sb.append('\n');
-		}
-		return sb.toString();
 	}
 
-	public List<Accord> getAccords() {
-		return accords;
+	public List<Portee> getPortees() {
+		return portees;
 	}
+
+	public void setPortees(List<Portee> portees) {
+		this.portees = portees;
+	}
+	
+	
 }

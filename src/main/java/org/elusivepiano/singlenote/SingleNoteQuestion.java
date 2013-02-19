@@ -5,7 +5,6 @@ import org.elusivepiano.question.NoteAnswer;
 import org.elusivepiano.question.Question;
 import org.elusivepiano.question.StringAnswer;
 import org.elusivepiano.solfege.NoteHarmonique;
-import org.elusivepiano.solfege.Partition;
 
 public class SingleNoteQuestion extends Question {
 
@@ -17,11 +16,6 @@ public class SingleNoteQuestion extends Question {
 
 	public NoteHarmonique getNote() {
 		return note;
-	}
-
-	@Override
-	public String toString() {
-		return new Partition(note).stringRepresentation();
 	}
 
 	@Override

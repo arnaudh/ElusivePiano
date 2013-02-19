@@ -23,7 +23,6 @@ public class ChordViewer extends PartitionPanel implements MidiEventListener {
 	}
 
 	private void updatePartition() {
-		partition = new Partition();
 		Accord accord = new Accord();
 		for (int key = 0; key < keyPressed.length; key++) {
 			if (keyPressed[key]) {
@@ -31,7 +30,7 @@ public class ChordViewer extends PartitionPanel implements MidiEventListener {
 				accord.getNotes().add(note);
 			}
 		}
-		partition.getAccords().add(accord);
+		partition = new Partition();
 		repaint();
 	}
 

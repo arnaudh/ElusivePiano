@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
+import javax.sound.midi.ShortMessage;
 
 public class MidiHandler implements Receiver {
 
@@ -29,12 +30,12 @@ public class MidiHandler implements Receiver {
 				byte value = bytes[2];
 				System.out.println(code);
 				switch(code){
-				case -112 : // key down, value is velocity
+				case (byte) ShortMessage.NOTE_ON :
 					for( MidiEventListener listener : listeners ){
 						listener.noteDown(key, value);
 					}
 					break;
-				case -128 : // key up, value is velocity
+				case (byte) ShortMessage.NOTE_OFF :
 					for( MidiEventListener listener : listeners ){
 						listener.noteUp(key, value);
 					}

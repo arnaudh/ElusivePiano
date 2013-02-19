@@ -1,9 +1,12 @@
 package org.elusivepiano.solfege;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Accord {
+import org.elusivepiano.ui.RenderingParams;
+
+public class Accord implements Symbole {
 
 	private List<NoteHarmonique> notes = new ArrayList<NoteHarmonique>();
 
@@ -19,6 +22,13 @@ public class Accord {
 
 	public void setNotes(List<NoteHarmonique> notes) {
 		this.notes = notes;
+	}
+
+	@Override
+	public void paint(Graphics2D g2, RenderingParams params) {
+		for( NoteHarmonique note : notes ){
+			note.paint(g2, params);
+		}
 	}
 	
 	

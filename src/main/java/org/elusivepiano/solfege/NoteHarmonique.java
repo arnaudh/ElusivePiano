@@ -1,16 +1,22 @@
 package org.elusivepiano.solfege;
 
-public class NoteHarmonique {
+import java.awt.Graphics2D;
+
+import org.elusivepiano.ui.RenderingParams;
+
+public class NoteHarmonique implements Symbole {
 
 	private Note note;
 	private Alteration alteration;
 	private int octave;
+	private Figure figure;
 
-	public NoteHarmonique(Note note, Alteration alteration, int octave) {
+	public NoteHarmonique(Note note, Alteration alteration, int octave, Figure figure) {
 		super();
 		this.note = note;
 		this.alteration = alteration;
 		this.octave = octave;
+		this.figure = figure;
 	}
 
 	public Note getNote() {
@@ -25,18 +31,36 @@ public class NoteHarmonique {
 		return octave;
 	}
 	
+	public void paint(Graphics2D g2, RenderingParams params){
+		int translate = getLine() * params.getSpaceBetwenLines()/2;
+
+		g2.translate(0, translate);
+		figure.paint(g2, params);
+		alteration.paint(g2, params);
+		g2.translate(0, -translate);
+		
+		int increment = getLine() < 0 ? 1 : -1;
+		int lineStart = getLine() + -getLine()%2;
+		System.out.println("getLine()="+getLine()+", getLine()%2="+getLine()%2+", increment="+increment+", lineStart="+lineStart);
+		for( int line = lineStart; line != 0; line+=increment*2 ){
+			drawDash(g2, params, 0, line);
+		}
+	}
+
+	private void drawDash(Graphics2D g2, RenderingParams params, int offset, int line) {
+		int height = line * params.getSpaceBetwenLines()/2;
+		int width = (int) (params.getNoteWidth()*0.8);
+		g2.drawLine(-width, height, width, height);
+	}
+	
 	/**
-	 * C4 -> 1
-	 * C4# -> 1
-	 * D4b -> 2
-	 * D4 -> 2
-	 * ...
-	 * C5 -> 8
+	 * Fa5 = 0
+	 * Mi5  = 1
 	 * ...
 	 * @return
 	 */
 	public int getLine(){
-		return 7 * (octave - 4) + note.getIndex();
+		return 7 * (5 - octave) - note.getIndex() + 3;
 	}
 	
 	@Override
@@ -74,7 +98,7 @@ public class NoteHarmonique {
 			semiton = (semiton + 1) / 2;
 		}
 		NoteHarmonique noteHarmonique = new NoteHarmonique(
-				Note.values()[semiton], alteration, octave);
+				Note.values()[semiton], alteration, octave, Figure.CROCHE);
 		return noteHarmonique;
 	}
 
